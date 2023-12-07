@@ -1,0 +1,84 @@
+version: "3.3"
+
+services: 
+  apache-nifi:
+    hostname: apache-nifi
+    image: apache/nifi:1.23.0
+    container_name: apache-nifi
+    ports:
+      - "8443:8443"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.95"
+          memory: 4G
+    restart: on-failure
+    environment:
+      - SINGLE_USER_CREDENTIALS_USERNAME=nifi
+      - SINGLE_USER_CREDENTIALS_PASSWORD=HGd15bvfv8744ghbdhgdv7895agqERAo
+      - TZ=America/Sao_Paulo
+    healthcheck:
+      test: wget -q --spider http://apache-nifi:8443/nifi-api/system-diagnostics || exit 1
+      interval: 60s
+      timeout: 40s
+      retries: 3
+    volumes: 
+      - ./nifi/jdbc:/opt/nifi/nifi-current/jdbc
+      - nifi-logs:/opt/nifi/nifi-current/logs
+      - nifi-conf:/opt/nifi/nifi-current/conf
+      - nifi-state:/opt/nifi/nifi-current/state
+      - nifi-content:/opt/nifi/nifi-current/content_repository
+      - nifi-database:/opt/nifi/nifi-current/database_repository
+      - nifi-flowfile:/opt/nifi/nifi-current/flowfile_repository
+      - nifi-provenance:/opt/nifi/nifi-current/provenance_repository
+    networks:
+      nifi-network:
+        ipv4_address: 10.0.0.2
+  mysql:
+    depends_on:
+      - apache-nifi
+    hostname: mysql
+    image: mysql:5.7.40
+    container_name: mysql
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - mysql-database:/var/lib/mysql:rw
+      - ./mysql/deploy/init:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.95"
+          memory: 2G
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=d8Uwj1wos64h
+      - MYSQL_DATABASE=nifi_db
+      - TZ=America/Sao_Paulo
+    healthcheck:
+      test: mysqladmin ping -h mysql -u root -pd8Uwj1wos64h || exit 1
+      interval: 30s
+      timeout: 20s
+      retries: 5
+    networks:
+      nifi-network:
+        ipv4_address: 10.0.0.3
+
+volumes:
+  nifi-logs:
+  nifi-conf:
+  nifi-state:
+  nifi-content:
+  nifi-database:
+  nifi-flowfile:
+  nifi-provenance:
+  mysql-database:
+
+networks:
+  nifi-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.0.0.0/16
