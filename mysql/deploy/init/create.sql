@@ -14,7 +14,7 @@ VALUES
 ('01153000', 'Sistema A'), ('20050000', 'Sistema B'), ('70714020', 'Sistema C');
 
 CREATE TABLE IF NOT EXISTS nifi_db.ceps_completos (
-	  id INT AUTO_INCREMENT,
+	id INT AUTO_INCREMENT,
     cep VARCHAR(10),
     logradouro VARCHAR(255),
     complemento VARCHAR(255),
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS nifi_db.ceps_completos (
     gia VARCHAR(255),
     ddd VARCHAR(5),
     siafi VARCHAR(10),
-	  datahora_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	datahora_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
 );
 
@@ -38,20 +38,22 @@ CREATE TABLE IF NOT EXISTS nifi_db.ceps_completos (
 --   ('70714020', 'Rua Exemplo 3', 'Complemento 3', 'Bairro C', 'Cidade Z', 'UF', '9876543', 'GIA 3', '33', '21098');
 
 
---SELECT 	t1.origem,
---          t2.cep, 
---		    t2.logradouro, 
---		    t2.complemento,
---	    	t2.bairro, 
---	    	t2.localidade,
---	    	t2.uf,
---	    	t2.ibge,
---	    	t2.gia,
---	    	t2.ddd,
---	    	t2.siafi
---FROM  nifi_db.ceps_unicos t1
---LEFT JOIN nifi_db.ceps_completos t2
---ON t1.cep = t2.cep;
+-- SELECT * FROM nifi_db.ceps_completos;
+
+-- SELECT 	t1.origem,
+--         t2.cep, 
+-- 		t2.logradouro, 
+-- 		t2.complemento,
+-- 		t2.bairro, 
+-- 		t2.localidade,
+-- 		t2.uf,
+-- 		t2.ibge,
+-- 		t2.gia,
+-- 		t2.ddd,
+-- 		t2.siafi
+-- FROM  nifi_db.ceps_unicos t1
+-- LEFT JOIN nifi_db.ceps_completos t2
+-- ON CONCAT(SUBSTRING(t1.cep, 1, 5), '-', SUBSTRING(t1.cep, 6, 3)) = t2.cep;
 
 
 
