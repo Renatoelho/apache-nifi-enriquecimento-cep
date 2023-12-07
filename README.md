@@ -47,7 +47,7 @@ docker compose -p project-apache-nifi-enriq-cep -f docker-compose.yaml up -d
 
 + URLs de acesso:
 
-|Serviço            |URL           |
+|Serviço            |URL/Host           |
 |-------------------|--------------| 
 |Apache Nifi|[localhost:8443/nifi](http://localhost:8443/nifi)|
 |Server MySQL|localhost:3306|
