@@ -33,7 +33,7 @@ services:
       - nifi-provenance:/opt/nifi/nifi-current/provenance_repository
     networks:
       nifi-network:
-        ipv4_address: 10.0.0.2
+        ipv4_address: 10.16.0.2
   mysql:
     depends_on:
       - apache-nifi
@@ -63,7 +63,7 @@ services:
       retries: 5
     networks:
       nifi-network:
-        ipv4_address: 10.0.0.3
+        ipv4_address: 10.16.0.3
 
 volumes:
   nifi-logs:
@@ -81,4 +81,4 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: 10.0.0.0/16
+        - subnet: 10.16.0.0/24
